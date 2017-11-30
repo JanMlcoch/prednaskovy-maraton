@@ -1,11 +1,21 @@
 <div>
-  <form [formGroup]="userForm" *ngIf="newUser" (ngSubmit)="signup()">
+  <form [formGroup]="userForm">
     <h3>Registrace</h3>
     <p>Registrací se přihlásíte na akci.</p>
-    <!--<p class="button is-small" (click)="toggleForm()">Already Registered?</p>-->
-    <hr>
+
+    <h2>Místo registrace se chci přihlásit přes sociální síť</h2>
+
+    <button (click)="signInWithGoogle()" class="button btn-social btn-google">
+      <i class="fa fa-google-plus fa-lg"></i> Přihlásit se přes účet Google
+    </button>
+
+    <button (click)="signInWithFacebook()" class="button  btn-social btn-facebook">
+      <i class="fa fa-facebook fa-lg"></i> Přihlásit se přes účet Facebook
+    </button>
+
+
+    <h2>Klasická registrace pomocí emailu</h2>
     <div class="row">
-      <!--<label for="email">Email</label>-->
       <mat-form-field>
         <input matInput id="name" class="input" placeholder="Jméno" formControlName="name">
       </mat-form-field>
@@ -21,7 +31,6 @@
     </div>
 
     <div class="row">
-      <!--<label for="password">Password</label>-->
       <mat-form-field>
         <input matInput type="password" id="password" class="input"
                placeholder="Password" formControlName="password" required>
@@ -32,47 +41,14 @@
     </div>
 
     <div class="row">
-      <!--<div *ngIf="userForm.valid" class="notification is-success">Form is valid</div>-->
-      <button mat-raised-button type="submit" class="button"
+      <button mat-raised-button type="submit" class="button" (click)="signUpWithEmail()"
               [disabled]="!userForm.valid">Registrovat se na akci
       </button>
     </div>
+    <ngb-alert type="danger" *ngIf="isUnknownError">
+      Neznámá chyba
+    </ngb-alert>
   </form>
-
-
-  <!--<form [formGroup]="userForm" *ngIf="!newUser" (ngSubmit)="login()">-->
-  <!--<h3>Existing User Login</h3>-->
-  <!--<p class="btn button is-small" (click)="toggleForm()">New User?</p>-->
-  <!--<hr>-->
-
-  <!--&lt;!&ndash;<label for="email">Email</label>&ndash;&gt;-->
-  <!--<mat-form-field>-->
-  <!--<input matInput type="email" id="email" class="input" placeholder="Email" formControlName="email" required>-->
-  <!--<mat-error *ngIf="formErrors.email" class="help is-danger">-->
-  <!--{{ formErrors.email }}-->
-  <!--</mat-error>-->
-  <!--</mat-form-field>-->
-
-
-  <!--&lt;!&ndash;<label for="password">Password</label>&ndash;&gt;-->
-  <!--<mat-form-field>-->
-  <!--<input matInput type="password" id="password" class="input"-->
-  <!--placeholder="Password" formControlName="password" required>-->
-  <!--<mat-error *ngIf="formErrors.password" class="help is-danger">-->
-  <!--{{ formErrors.password }}-->
-  <!--</mat-error>-->
-  <!--</mat-form-field>-->
-
-
-  <!--<button mat-button type="submit" class="button" [disabled]="!userForm.valid">Submit</button>-->
-
-  <!--<span *ngIf="userForm.valid" class="help is-success">Form Looks Valid</span>-->
-
-  <!--<a *ngIf="!passReset && userForm.controls.email.valid" class="help is-info" (click)="resetPassword()">Reset Password-->
-  <!--for {{userForm.value.email}}?</a>-->
-  <!--<p *ngIf="passReset" class="help is-info">Reset requested. Check your email instructions.</p>-->
-  <!--</form>-->
-
   <p>
     Registrací závazně potvrzují svoji účast na akci Přednáškový maraton 2018 a také potvrzuji, že jsem seznámen(a) s
     <a routerLink="/rules"> pravidly akce </a>

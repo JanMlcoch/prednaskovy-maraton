@@ -6,3 +6,9 @@
 .list-group-item {
   border: none;
 }
+
+.button {
+  margin: 10px 0;
+  height: 35px;
+  display: block;
+}

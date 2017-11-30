@@ -70,7 +70,6 @@ export class AuthService {
   }
 
   //// Social Auth ////
-
   githubLogin() {
     const provider = new firebase.auth.GithubAuthProvider();
     return this.socialSignIn(provider);
@@ -99,9 +98,7 @@ export class AuthService {
       .catch(error => console.log(error));
   }
 
-
   //// Anonymous Auth ////
-
   emailSignUp(email: string, password: string, name: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
@@ -118,7 +115,6 @@ export class AuthService {
   }
 
   //// Email/Password Auth ////
-
   emailLogin(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((user) => {
@@ -144,7 +140,6 @@ export class AuthService {
 
 
   //// Sign Out ////
-
   private socialSignIn(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
@@ -155,7 +150,6 @@ export class AuthService {
   }
 
   //// Helpers ////
-
   private updateUserData(): void {
     // Writes user name and email to realtime db
     // useful if your app displays information about users or for admin features
@@ -170,6 +164,9 @@ export class AuthService {
 
     userRef.update(data)
       .catch(error => console.log(error));
+  }
 
+  updateUser(userData) {
+    this.authState.updateProfile(userData);
   }
 }

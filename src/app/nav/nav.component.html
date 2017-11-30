@@ -14,7 +14,8 @@
     </div>
     <div [class.collapse]="window.innerWidth < 768">
       <ul class="nav navbar-nav navbar-right" *ngIf="isLoggedIn$ | async">
-        <li class="loggedUser">{{displayName}}</li>
+        <li class="loggedUser">
+          <a routerLink="/profile">{{displayName}}</a></li>
         <li><button class="btn btn-link navbar-btn" (click)="logOut()">Log Out</button></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" *ngIf="!(isLoggedIn$ | async)">

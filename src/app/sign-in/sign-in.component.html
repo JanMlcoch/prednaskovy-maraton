@@ -1,14 +1,21 @@
-<div>
-  <div class="md-toolbar-tools">
-    <h2>Přihlášení</h2>
-    <br>
-    <!--<span class="flex"></span>-->
-    <!--<button mat-icon-button (click)="closeDialog()">-->
-    <!--<mat-icon>clear</mat-icon>-->
-    <!--</button>-->
-  </div>
+<div class="md-toolbar-tools">
+  <h2>Přihlášení</h2>
+  <br>
+  <!--<span class="flex"></span>-->
+  <!--<button mat-icon-button (click)="closeDialog()">-->
+  <!--<mat-icon>clear</mat-icon>-->
+  <!--</button>-->
 </div>
 <mat-dialog-content>
+  <button (click)="signInWithGoogle()" class="button btn-social btn-google">
+    <i class="fa fa-google-plus fa-lg"></i> Přihlásit se přes účet Google
+  </button>
+
+  <button (click)="signInWithFacebook()" class="button btn-social btn-facebook">
+    <i class="fa fa-facebook fa-lg"></i> Přihlásit se přes účet Facebook
+  </button>
+
+  <hr>
   <form [formGroup]="signInForm" (ngSubmit)="login()">
     <div class="row">
       <mat-form-field>
@@ -30,5 +37,11 @@
       <button mat-raised-button type="submit" class="button" [disabled]="!signInForm.valid">Přihlásit</button>
       <button mat-raised-button mat-dialog-close class="button">Zavřít</button>
     </div>
+    <ngb-alert type="danger" *ngIf="isUnknownError">
+      Neznámá chyba
+    </ngb-alert>
+    <ngb-alert type="danger" *ngIf="isInvalidCredentials">
+      Neplatné přihlašovací údaje
+    </ngb-alert>
   </form>
 </mat-dialog-content>
