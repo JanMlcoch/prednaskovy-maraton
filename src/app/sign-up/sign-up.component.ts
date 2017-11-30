@@ -9,14 +9,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-  userForm: FormGroup;
-  isUnknownError = false;
-  passReset = false; // set to true when password reset is triggered
-  formErrors = {
+  public userForm: FormGroup;
+  public isUnknownError = false;
+  public passReset = false; // set to true when password reset is triggered
+  public formErrors = {
     'email': '',
     'password': ''
   };
-  validationMessages = {
+  public validationMessages = {
     'email': {
       'required': 'Email is required.',
       'email': 'Email must be a valid email'
@@ -34,21 +34,21 @@ export class SignUpComponent implements OnInit {
               private auth: AuthService) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.buildForm();
   }
 
-  signUpWithEmail(): void {
+  public signUpWithEmail(): void {
     this.auth.emailSignUp(this.userForm.value['email'], this.userForm.value['password'], this.userForm.value['name'])
       .then(() => this.afterSignIn());
   }
 
-  signInWithGoogle(): void {
+  public signInWithGoogle(): void {
     this.auth.googleLogin()
       .then(() => this.afterSignIn());
   }
 
-  signInWithFacebook(): void {
+  public signInWithFacebook(): void {
     this.auth.facebookLogin()
       .then(() => this.afterSignIn());
   }
@@ -62,12 +62,12 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  resetPassword() {
+  public resetPassword() {
     this.auth.resetPassword(this.userForm.value['email'])
       .then(() => this.passReset = true);
   }
 
-  buildForm(): void {
+  public buildForm(): void {
     this.userForm = this.fb.group({
       'email': ['', [
         Validators.required,
@@ -88,7 +88,7 @@ export class SignUpComponent implements OnInit {
   }
 
   // Updates validation state on form changes.
-  onValueChanged(data?: any) {
+  public onValueChanged(data?: any) {
     if (!this.userForm) { return; }
     const form = this.userForm;
     for (const field in this.formErrors) {

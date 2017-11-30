@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../shared/services/auth.service';
-import { MatDialogRef } from '@angular/material';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../shared/services/auth.service';
+import {MatDialogRef} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -9,15 +10,15 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit, OnDestroy {
-  signInForm: FormGroup;
-  subscription;
-  isUnknownError = false;
-  isInvalidCredentials = false;
-  formErrors = {
+  public signInForm: FormGroup;
+  public subscription;
+  public isUnknownError = false;
+  public isInvalidCredentials = false;
+  public formErrors = {
     'email': '',
     'password': ''
   };
-  validationMessages = {
+  public validationMessages = {
     'email': {
       'required': 'Email is required.',
       'email': 'Email must be a valid email'
@@ -32,14 +33,15 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<SignInComponent>,
+              private router: Router,
               private auth: AuthService) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.buildForm();
   }
 
-  login(): void {
+  public login(): void {
     this.isInvalidCredentials = false;
     this.auth.emailLogin(this.signInForm.value['email'], this.signInForm.value['password']).then(success => {
       if (this.auth.authenticated) {
@@ -50,7 +52,7 @@ export class SignInComponent implements OnInit, OnDestroy {
     });
   }
 
-  buildForm(): void {
+  public buildForm(): void {
     this.signInForm = this.fb.group({
       'email': ['', [
         Validators.required,
@@ -69,8 +71,10 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.onValueChanged(); // reset validation messages
   }
 
-  onValueChanged(data?: any) {
-    if (!this.signInForm) { return; }
+  public onValueChanged(data?: any) {
+    if (!this.signInForm) {
+      return;
+    }
     const form = this.signInForm;
     for (const field in this.formErrors) {
       if (Object.prototype.hasOwnProperty.call(this.formErrors, field)) {
@@ -89,11 +93,26 @@ export class SignInComponent implements OnInit, OnDestroy {
     }
   }
 
-  closeDialog(): void {
+  public closeDialog(): void {
     this.dialogRef.close();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  public signInWithGoogle(): void {
+    this.auth.googleLogin()
+      .then(() => this.afterSignIn());
+  }
+
+  private afterSignIn(): void {
+    // Do after login stuff here, such router redirects, toast messages, etc.
+    if (this.auth.authenticated) {
+      this.router.navigate(['/']);
+      this.closeDialog();
+    } else {
+      this.isUnknownError = true;
+    }
   }
 }
