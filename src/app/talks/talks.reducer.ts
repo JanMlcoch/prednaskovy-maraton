@@ -11,14 +11,19 @@ export interface Talk {
 export const talkAdapter = createEntityAdapter<Talk>();
 export interface TalkState extends EntityState<Talk> { }
 
+// const defaultTalk = {
+//   ids: ['123'],
+//   entities: {
+//     '123': {
+//       id: '123',
+//       name: 'Testovací přednáška'
+//     }
+//   }
+// };
+
 const defaultTalk = {
-  ids: ['123'],
-  entities: {
-    '123': {
-      id: '123',
-      name: 'Testovací přednáška'
-    }
-  }
+  ids: [],
+  entities: {}
 };
 
 export const initialState: TalkState = talkAdapter.getInitialState(defaultTalk);

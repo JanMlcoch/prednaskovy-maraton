@@ -19,6 +19,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SharedComponentsModule } from './shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {AngularFirestore, AngularFirestoreModule} from 'angularfire2/firestore';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent],

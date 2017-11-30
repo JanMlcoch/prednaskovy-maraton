@@ -28,7 +28,7 @@
       true,
       140
     ],
-    "member-access": false,
+    "member-access": true,
     "member-ordering": [
       true,
       {
@@ -80,10 +80,6 @@
       "check-whitespace"
     ],
     "prefer-const": true,
-    "quotemark": [
-      true,
-      "single"
-    ],
     "radix": true,
     "semicolon": [
       true,
