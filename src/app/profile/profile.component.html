@@ -1,0 +1,59 @@
+<div class="userContainer" *ngIf="currentUser">
+  <form [formGroup]="profileForm">
+    <h1>Profil uživatele</h1>
+    <div class="row">
+      <div class="col-md-4">
+        Jméno:
+      </div>
+      <div class="col-md-8">
+        <p *ngIf="!isEditing">{{currentUser.displayName}}</p>
+        <mat-form-field *ngIf="isEditing">
+          <input matInput type="text" id="name" class="input" placeholder="Vyplňte jméo" formControlName="displayName">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        Email:
+      </div>
+      <div class="col-md-8">
+        <p>
+          {{currentUser.email}}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        Potvrzená rezervace:
+      </div>
+      <div class="col-md-8">
+        ANO
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        Stravování:
+      </div>
+      <div class="col-md-8">
+        <div *ngIf="!isEditing">
+          <p *ngIf="currentUser.lunch">ANO</p>
+          <p *ngIf="!currentUser.lunch">NE</p>
+        </div>
+        <div *ngIf="isEditing">
+          <p *ngIf="currentUser.lunch">ANO</p>
+          <p *ngIf="!currentUser.lunch">NE</p>
+        </div>
+        <div *ngIf="false">
+          Dodělat obědy!
+          <!--<input matInput type="email" id="email" class="input" placeholder="Email" formControlName="email">-->
+          <!--<input matInput type="checkbox" id="lunch" formControlName="lunch">-->
+          <mat-checkbox formControlName="lunch">Chci využít statravování na akci</mat-checkbox>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button mat-raised-button *ngIf="isEditing" (click)="save()">Uložit změny</button>
+      <button mat-raised-button *ngIf="!isEditing" (click)="isEditing = true">Upravit profil</button>
+    </div>
+  </form>
+</div>

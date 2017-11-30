@@ -9,9 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-
   userForm: FormGroup;
-  newUser = true; // to toggle login or signup form
+  isUnknownError = false;
   passReset = false; // set to true when password reset is triggered
   formErrors = {
     'email': '',
@@ -39,18 +38,28 @@ export class SignUpComponent implements OnInit {
     this.buildForm();
   }
 
-  toggleForm() {
-    this.newUser = !this.newUser;
+  signUpWithEmail(): void {
+    this.auth.emailSignUp(this.userForm.value['email'], this.userForm.value['password'], this.userForm.value['name'])
+      .then(() => this.afterSignIn());
   }
 
-  signup(): void {
-    this.auth.emailSignUp(this.userForm.value['email'], this.userForm.value['password'], this.userForm.value['name']).then(success => {
+  signInWithGoogle(): void {
+    this.auth.googleLogin()
+      .then(() => this.afterSignIn());
+  }
+
+  signInWithFacebook(): void {
+    this.auth.facebookLogin()
+      .then(() => this.afterSignIn());
+  }
+
+  private afterSignIn(): void {
+    // Do after login stuff here, such router redirects, toast messages, etc.
+    if (this.auth.authenticated) {
       this.router.navigate(['/']);
-    });
-  }
-
-  login(): void {
-    this.auth.emailLogin(this.userForm.value['email'], this.userForm.value['password']);
+    } else {
+      this.isUnknownError = true;
+    }
   }
 
   resetPassword() {

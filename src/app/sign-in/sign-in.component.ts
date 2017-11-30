@@ -11,6 +11,8 @@ import { MatDialogRef } from '@angular/material';
 export class SignInComponent implements OnInit, OnDestroy {
   signInForm: FormGroup;
   subscription;
+  isUnknownError = false;
+  isInvalidCredentials = false;
   formErrors = {
     'email': '',
     'password': ''
@@ -38,8 +40,13 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   login(): void {
+    this.isInvalidCredentials = false;
     this.auth.emailLogin(this.signInForm.value['email'], this.signInForm.value['password']).then(success => {
-      this.closeDialog();
+      if (this.auth.authenticated) {
+        this.closeDialog();
+      } else {
+        this.isInvalidCredentials = true;
+      }
     });
   }
 

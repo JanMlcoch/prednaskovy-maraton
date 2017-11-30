@@ -19,6 +19,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SharedComponentsModule } from './shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthGuard } from './guards/auth.guard';
 import {AngularFirestore, AngularFirestoreModule} from 'angularfire2/firestore';
 
 @NgModule({
@@ -46,7 +48,9 @@ import {AngularFirestore, AngularFirestoreModule} from 'angularfire2/firestore';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SignInComponent],
 })

@@ -17,7 +17,11 @@
 }
 
 mat-dialog-content {
-  width: 350px;
+  width: 450px;
+}
+
+.md-toolbar-tools {
+  margin: 5px 0 20px 0;
 }
 
 .row {

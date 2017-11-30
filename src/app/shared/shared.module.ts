@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { NgbAlertModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule
+} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -11,9 +13,11 @@ import { MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatSel
     NgbModule.forRoot(),
   ],
   exports: [
+    NgbAlertModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
     ReactiveFormsModule,
