@@ -31,7 +31,7 @@ export class ProfileComponent implements OnInit {
   updateFormValues(): void {
     this.profileForm.setValue({
       displayName: this.auth.currentUserDisplayName,
-      lunch: this.auth.lunch ? this.auth.lunch : null,
+      lunch: false,
     });
   }
 
