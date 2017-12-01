@@ -50,6 +50,25 @@ export class SignInComponent implements OnInit, OnDestroy {
     });
   }
 
+  signInWithGoogle(): void {
+    this.auth.googleLogin()
+      .then(() => this.afterSignIn());
+  }
+
+  signInWithFacebook(): void {
+    this.auth.facebookLogin()
+      .then(() => this.afterSignIn());
+  }
+
+  private afterSignIn(): void {
+    // Do after login stuff here, such router redirects, toast messages, etc.
+    if (this.auth.authenticated) {
+      this.closeDialog();
+    } else {
+      this.isUnknownError = true;
+    }
+  }
+
   buildForm(): void {
     this.signInForm = this.fb.group({
       'email': ['', [
