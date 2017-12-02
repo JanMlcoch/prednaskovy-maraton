@@ -51,26 +51,9 @@ export class SignInComponent implements OnInit, OnDestroy {
       }
     });
   }
-  signInWithGoogle(): void {
-    this.auth.googleLogin()
-      .then(() => this.afterSignIn());
-  }
 
-  signInWithFacebook(): void {
-    this.auth.facebookLogin()
-      .then(() => this.afterSignIn());
-  }
 
-  private afterSignIn(): void {
-    // Do after login stuff here, such router redirects, toast messages, etc.
-    if (this.auth.authenticated) {
-      this.closeDialog();
-    } else {
-      this.isUnknownError = true;
-    }
-  }
-
-  buildForm(): void {
+  public buildForm(): void {
     this.signInForm = this.fb.group({
       'email': ['', [
         Validators.required,
@@ -121,6 +104,11 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   public signInWithGoogle(): void {
     this.auth.googleLogin()
+      .then(() => this.afterSignIn());
+  }
+
+  public signInWithFacebook(): void {
+    this.auth.facebookLogin()
       .then(() => this.afterSignIn());
   }
 

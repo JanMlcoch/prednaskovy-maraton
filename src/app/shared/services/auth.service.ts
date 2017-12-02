@@ -84,7 +84,7 @@ export class AuthService {
       .then((user) => {
         this.authState = user;
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('error', error));
   }
 
   //// Anonymous Auth ////
@@ -96,11 +96,11 @@ export class AuthService {
           displayName: name,
         }).catch(
           (error) => {
-            console.log(error);
+            console.log('error', error);
           });
         this.updateUserData();
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('error', error));
   }
 
   //// Email/Password Auth ////
@@ -110,7 +110,7 @@ export class AuthService {
         this.authState = user;
         this.updateUserData();
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('error', error));
   }
 
   // Sends email allowing user to reset password
@@ -119,7 +119,7 @@ export class AuthService {
 
     return fbAuth.sendPasswordResetEmail(email)
       .then(() => console.log('email sent'))
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('error', error));
   }
 
   public signOut(): void {
@@ -135,7 +135,7 @@ export class AuthService {
         this.authState = credential.user;
         this.updateUserData();
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('error', error));
   }
 
   //// Helpers ////
@@ -169,20 +169,8 @@ export class AuthService {
     this.afs.collection('users', ref => ref.where('size', '==', 'large'));
 
     users.subscribe((item) => {
-      console.log(item);
+      console.log('update users data item', item);
     });
-
-    // const path = `users/${this.currentUserId}`; // Endpoint on firebase
-    // const userRef: AngularFireObject<any> = this.db.object(path);
-    //
-
-    //
-    // userRef.update(data)
-    //   .catch(error => console.log(error));
-  }
-
-  private updateUser(userData) {
-    this.authState.updateProfile(userData);
   }
 }
 

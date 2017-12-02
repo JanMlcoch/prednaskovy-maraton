@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit {
     }
     const userDataPatch = {...this.profileForm.value};
     userDataPatch.lunch = userDataPatch.lunch ? userDataPatch.lunch : false;
-    this.auth.updateUser(userDataPatch);
+    // TODO: update user
+    // this.auth.updateUser(userDataPatch);
   }
 }

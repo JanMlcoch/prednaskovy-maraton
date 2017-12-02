@@ -22,7 +22,7 @@ export class TalksComponent implements OnInit {
     this.itemsCollection = afs.collection<fromTalk.Talk[]>('items');
     this.talks = this.itemsCollection.valueChanges();
     this.talks.subscribe((item) =>  {
-      console.log(item);
+      console.log('talks item ', item);
     });
   }
 
