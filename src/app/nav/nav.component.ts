@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../shared/services/auth.service';
-import { SignInComponent } from '../sign-in/sign-in.component';
-import { MatDialog } from '@angular/material';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../shared/services/auth.service';
+import {SignInComponent} from '../sign-in/sign-in.component';
+import {MatDialog} from '@angular/material';
 import {AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
-import {User} from 'firebase';
+import {User} from '../model/user';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -12,26 +13,27 @@ import {User} from 'firebase';
 })
 export class NavComponent implements OnInit {
 
-  public isLoggedIn$ = this.authService.currentUserObservable;
   public window = window;
+  public user: User = null;
 
-  constructor(private authService: AuthService,
+  constructor(public authService: AuthService,
               private afs: AngularFirestore,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private router: Router) {
   }
 
   public ngOnInit() {
-    this.isLoggedIn$.subscribe(data => {
-      console.log('logged', data);
-      this.afs.collection<User>('users').doc(data.uid).valueChanges()
-        .subscribe((udata) => {
-        console.log('user data', udata);
-      });
+    this.authService.userData.subscribe(user => {
+      this.user = user;
+      if (user && !user.hasAllObligatoryFields()) {
+        console.log('user has not all obligatory fields, navigate to profile');
+        this.router.navigate(['/profile']);
+      }
     });
   }
 
   get displayName() {
-    return this.authService.currentUserDisplayName;
+    return this.user ? this.user.name : '';
   }
 
   public logOut() {

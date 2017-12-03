@@ -55,7 +55,7 @@ export class SignUpComponent implements OnInit {
 
   private afterSignIn(): void {
     // Do after login stuff here, such router redirects, toast messages, etc.
-    if (this.auth.authenticated) {
+    if (this.auth.authState) {
       this.router.navigate(['/']);
     } else {
       this.isUnknownError = true;

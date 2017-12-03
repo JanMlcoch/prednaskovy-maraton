@@ -44,7 +44,7 @@ export class SignInComponent implements OnInit, OnDestroy {
   public login(): void {
     this.isInvalidCredentials = false;
     this.auth.emailLogin(this.signInForm.value['email'], this.signInForm.value['password']).then(success => {
-      if (this.auth.authenticated) {
+      if (this.auth.authState) {
         this.closeDialog();
       } else {
         this.isInvalidCredentials = true;
@@ -114,7 +114,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   private afterSignIn(): void {
     // Do after login stuff here, such router redirects, toast messages, etc.
-    if (this.auth.authenticated) {
+    if (this.auth.authState) {
       this.router.navigate(['/']);
       this.closeDialog();
     } else {

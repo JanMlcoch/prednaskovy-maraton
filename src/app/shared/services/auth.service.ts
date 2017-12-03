@@ -5,57 +5,46 @@ import {Router} from '@angular/router';
 import * as firebase from 'firebase/app';
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
 import * as fromTalk from '../../talks/talks.reducer';
+import {User} from '../../model/user';
+import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class AuthService {
-
   public authState: any = null;
-  public userRef: AngularFireObject<any>;
+  public userData: Subject<User> = new Subject<User>();
+  public userDataRef: AngularFirestoreDocument<any> = null;
 
   constructor(private afAuth: AngularFireAuth,
-              // private db: AngularFireDatabase,
               private afs: AngularFirestore,
               private router: Router) {
 
     this.afAuth.authState.subscribe((auth) => {
+      console.log('auth', auth);
       this.authState = auth;
+      if (!this.authState) {
+        console.log('user not logged');
+        return;
+      }
+      this.userDataRef = this.afs.collection<any>('users').doc(this.authState.uid);
+      this.userDataRef.valueChanges().take(1).subscribe((data) => {
+        if (data) {
+          this.userData.next(new User(data, this.userDataRef));
+        } else {
+          console.log('user data not created yet');
+          const newUserData = {
+            email: this.authState.email,
+            displayName: this.authState.displayName
+          };
+          this.userDataRef.set(newUserData)
+            .then((setEvent) => {
+              console.log('new user created', data, setEvent);
+            });
+          this.userData.next(new User(newUserData, this.userDataRef));
+        }
+      });
     });
-  }
-
-  // Returns true if user is logged in
-  get authenticated(): boolean {
-    return this.authState !== null;
-  }
-
-  // Returns current user data
-  get currentUser(): any {
-    return this.authenticated ? this.authState : null;
-  }
-
-  // Returns
-  get currentUserObservable(): any {
-    return this.afAuth.authState;
-  }
-
-  // Returns current user UID
-  get currentUserId(): string {
-    return this.authenticated ? this.authState.uid : '';
-  }
-
-  // Anonymous User
-  get currentUserAnonymous(): boolean {
-    return this.authenticated ? this.authState.isAnonymous : false;
-  }
-
-  // Returns current user display name or Guest
-  get currentUserDisplayName(): string {
-    if (!this.authState) {
-      return 'Guest';
-    } else if (this.currentUserAnonymous) {
-      return 'Anonymous';
-    } else {
-      return this.authState['displayName'] || this.authState['email'];
-    }
   }
 
   //// Social Auth ////
@@ -98,7 +87,7 @@ export class AuthService {
           (error) => {
             console.log('error', error);
           });
-        this.updateUserData();
+        // this.updateUserData();
       })
       .catch(error => console.log('error', error));
   }
@@ -108,7 +97,7 @@ export class AuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((user) => {
         this.authState = user;
-        this.updateUserData();
+        // this.updateUserData();
       })
       .catch(error => console.log('error', error));
   }
@@ -124,6 +113,8 @@ export class AuthService {
 
   public signOut(): void {
     this.afAuth.auth.signOut();
+    this.authState = null;
+    this.userData.next(null);
     this.router.navigate(['/']);
   }
 
@@ -133,48 +124,35 @@ export class AuthService {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
         this.authState = credential.user;
-        this.updateUserData();
+        // this.updateUserData();
       })
       .catch(error => console.log('error', error));
   }
 
-  //// Helpers ////
-  private updateUserData(): void {
-    // Writes user name and email to realtime db
-    // useful if your app displays information about users or for admin features
-
-    const itemsCollection: AngularFirestoreCollection<User> = this.afs.collection<User>('users');
-    const users = itemsCollection.valueChanges();
-
-    // const user: AngularFirestoreDocument<User> = itemsCollection.doc('blababl');
-    const user: AngularFirestoreDocument<User> = itemsCollection.doc(this.currentUserId);
-    const data = {
-      email: this.authState.email,
-      name: this.authState.displayName
-    };
-
-    user.update(data)
-    .then((event) => {
-      console.log('user updated', data, event);
-    })
-    .catch((event) => {
-      console.log('user not in database', data, event);
-      user.set(data).then((setEvent) => {
-        console.log('new user created - some profile route?', data, setEvent);
-      });
-    });
-
-    console.log('user', user);
-
-    this.afs.collection('users', ref => ref.where('size', '==', 'large'));
-
-    users.subscribe((item) => {
-      console.log('update users data item', item);
-    });
-  }
-}
-
-interface User {
-  email: string;
-  name: string;
+  // //// Helpers ////
+  // private updateUserData(): void {
+  //   // Writes user name and email to realtime db
+  //   // useful if your app displays information about users or for admin features
+  //
+  //   const itemsCollection: AngularFirestoreCollection<User> = this.afs.collection<User>('users');
+  //   // const users = itemsCollection.valueChanges();
+  //
+  //   const user: AngularFirestoreDocument<User> = itemsCollection.doc(this.currentUserId);
+  //
+  //   user.valueChanges().take(1)
+  //     .subscribe((udata) => {
+  //       console.log('user data', udata);
+  //     });
+  //
+  //   //
+  //   // user.update(data)
+  //   //   .then((event) => {
+  //   //     console.log('user updated', data, event);
+  //   //   })
+  //   //   .catch((event) => {
+  //   //     console.log('user not in database', data, event);
+  //   //   });
+  //   //
+  //   // console.log('user', user);
+  // }
 }

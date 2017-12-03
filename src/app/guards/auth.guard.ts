@@ -5,22 +5,23 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
+import {AuthService} from '../shared/services/auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private auth: AuthService
+    ) {
   }
 
-  canActivate(next: ActivatedRouteSnapshot,
+  public canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | boolean {
-    return this.afAuth.authState
-      .take(1)
-      .map(user => !!user)
-      .do(loggedIn => {
-        if (!loggedIn) {
-          console.log('access denied')
-          this.router.navigate(['/login']);
-        }
-      });
+    console.log('guard called');
+    return this.auth.userData.map((user) => {
+      console.log('guard', user);
+      return !!user;
+    });
   }
 }
