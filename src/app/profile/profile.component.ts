@@ -22,6 +22,9 @@ export class ProfileComponent implements OnInit {
 
   public ngOnInit() {
     this.auth.userData.subscribe((userData: User) => {
+      if (userData === null) {
+        return;
+      }
       console.log('profile got user data');
       this.user = userData;
       this.buildForm();
@@ -42,12 +45,12 @@ export class ProfileComponent implements OnInit {
     if (!this.profileForm.valid) {
       return;
     }
-    this.user.isRegistered = true;
+    this.user.willAttend = true;
     this.patchUser();
   }
 
   public cancelRegistration() {
-    this.user.isRegistered = false;
+    this.user.willAttend = false;
     this.patchUser();
   }
 

@@ -25,7 +25,7 @@ export class NavComponent implements OnInit {
   public ngOnInit() {
     this.authService.userData.subscribe(user => {
       this.user = user;
-      if (user && !user.hasAllObligatoryFields()) {
+      if (user && (!user.hasAllObligatoryFields() || !user.willAttend)) {
         console.log('user has not all obligatory fields, navigate to profile');
         this.router.navigate(['/profile']);
       }

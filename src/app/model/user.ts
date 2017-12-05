@@ -6,7 +6,7 @@ export class User {
   public name: string = null;
   public displayName: string = null;
   public lunch: boolean = null;
-  public isRegistered: boolean = false;
+  public willAttend: boolean = false;
 
   constructor(data: any,
               public ref: AngularFirestoreDocument<User>) {
@@ -18,10 +18,7 @@ export class User {
   }
 
   public hasAllObligatoryFields(): boolean {
-    return this.email &&
-      this.name &&
-      this.isRegistered &&
-      this.lunch;
+    return this.email && !!this.name;
   }
 
   public patch(): Promise<any> {
@@ -35,7 +32,7 @@ export class User {
       email: this.email,
       name: this.name,
       lunch: this.lunch,
-      isRegistered: this.isRegistered
+      willAttend: this.willAttend
     };
   }
 }

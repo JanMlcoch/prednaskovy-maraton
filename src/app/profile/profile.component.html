@@ -3,15 +3,17 @@
     Vyplňte prosím všechna povinná pole.
   </p>
 
-  <strong *ngIf="user && user.isRegistered === false">
-    Vaše registrace je zrušena. Obnovíte ji kliknutím na tlačítko Zaregistrovat se.
-  </strong>
-
-  <strong *ngIf="savedNotice">
-    Vaše změny byly úspěšně uloženy.
-  </strong>
-
   <form [formGroup]="profileForm">
+    <ngb-alert type="danger" *ngIf="hasAllObligatoryFields() && user && !user.willAttend">
+      <p>Zrušili jste svoji účast na akci. Pomocí tlačítka níže se můžete znovu přihlásit.</p>
+      <br>
+      <button mat-raised-button (click)="save()">Znovu se přihlásit na akci</button>
+    </ngb-alert>
+    <ngb-alert type="success" *ngIf="savedNotice">
+      <strong>
+        Vaše změny byly úspěšně uloženy.
+      </strong>
+    </ngb-alert>
     <h1>Profil uživatele</h1>
     <div class="row">
       <div class="col-md-12">
@@ -36,10 +38,10 @@
       </div>
     </div>
     <div class="row">
-      <button mat-raised-button *ngIf="user && user.isRegistered" (click)="save()">Uložit změny</button>
-      <button mat-raised-button *ngIf="user && user.isRegistered" (click)="cancelRegistration()">Zruš registraci
+      <button mat-raised-button *ngIf="user && user.willAttend" (click)="save()">Uložit změny</button>
+      <button mat-raised-button *ngIf="user && user.willAttend" (click)="cancelRegistration()">Zruš registraci
       </button>
-      <button mat-raised-button *ngIf="user && !user.isRegistered" (click)="save()">Zaregistrovat se</button>
+      <button mat-raised-button *ngIf="user && !user.willAttend" (click)="save()">Zaregistrovat se</button>
     </div>
   </form>
 </div>

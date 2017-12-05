@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthModule } from './auth.module';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+import { UserModule } from './user.service';
 
 @NgModule({
   imports: [
@@ -9,6 +9,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
   ],
   exports: [
     AuthModule,
+    UserModule,
   ],
 })
 export class ServicesModule {

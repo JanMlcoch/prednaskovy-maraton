@@ -13,7 +13,7 @@ import {Subject} from 'rxjs/Subject';
 @Injectable()
 export class AuthService {
   public authState: any = null;
-  public userData: Subject<User> = new Subject<User>();
+  public userData: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   public userDataRef: AngularFirestoreDocument<any> = null;
 
   constructor(private afAuth: AngularFireAuth,
@@ -90,6 +90,15 @@ export class AuthService {
         // this.updateUserData();
       })
       .catch(error => console.log('error', error));
+  }
+
+  public sendVerifyEmail() {
+    this.authState.sendEmailVerification().then(function () {
+      console.log('Confirm registration email sent');
+      // Email sent.
+    }).catch(function (error) {
+      // An error happened.
+    });
   }
 
   //// Email/Password Auth ////
